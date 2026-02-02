@@ -1,0 +1,50 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+*.pid
+*.seed
+*.pid.lock
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+.tmp/
+tmp/
+*.bak
+
+# Build outputs
+dist/
+build/
+
+# Local environment overrides
+.env.local
+.env.*.local
+config/.env.local*
+config/.env.local.example
+
+# Tasks and reports (generated)
+tasks/
+reports/
+
+# Cache
+.cache/
+
+# User-specific
+*.user

@@ -1,0 +1,28 @@
+{
+  "name": "compound-learning-system",
+  "version": "1.0.0",
+  "description": "Dual-agent compound learning system for nightly codebase improvement",
+  "main": "setup.ts",
+  "type": "module",
+  "scripts": {
+    "setup": "tsx setup.ts",
+    "start": "tsx setup.ts"
+  },
+  "keywords": [
+    "compound-learning",
+    "claude",
+    "opencode",
+    "nightly-automation",
+    "learning-system"
+  ],
+  "author": "Compound Learning",
+  "license": "MIT",
+  "dependencies": {
+    "@opentui/core": "^0.1.76"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}
