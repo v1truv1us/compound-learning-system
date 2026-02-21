@@ -26,6 +26,10 @@ BRANCH_NAME=$(echo "$PRIORITY_ITEM" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0
 # Add timestamp to ensure uniqueness
 BRANCH_NAME="compound-${BRANCH_NAME}-$(date +%s)"
 
-# Output shell-compatible format (one per line)
-echo "$PRIORITY_ITEM"
-echo "$BRANCH_NAME"
+# Output JSON format
+cat <<EOF
+{
+  "priority_item": "$PRIORITY_ITEM",
+  "branch_name": "$BRANCH_NAME"
+}
+EOF

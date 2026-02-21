@@ -2,7 +2,7 @@
 # loop.sh - Iterative task execution engine
 # Executes tasks from prd.json with iteration limit and retry logic
 
-set -e
+set -eEuo pipefail
 
 source "$(dirname "$0")/common.sh"
 load_config
@@ -10,6 +10,9 @@ load_config
 ITERATION_LIMIT="${1:-25}"
 COMPOUND_ROOT=$(get_compound_root)
 PD_FILE="$COMPOUND_ROOT/tasks/prd.json"
+
+# Ensure logs directory exists
+mkdir -p "$COMPOUND_ROOT/logs"
 
 if [ ! -f "$PD_FILE" ]; then
   log_error "PRD file not found at $PD_FILE"

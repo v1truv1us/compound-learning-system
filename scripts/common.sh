@@ -37,6 +37,7 @@ send_discord() {
 
   # Skip if webhook not configured
   if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+    log "Discord webhook not configured, skipping notification"
     return 0
   fi
 
@@ -53,10 +54,19 @@ send_discord() {
 EOF
 )
 
-  # Send to Discord (silently fail if webhook is down)
-  curl -s -X POST "$DISCORD_WEBHOOK_URL" \
+  # Send to Discord and capture status code without exposing URL/token
+  local http_code
+  http_code=$(curl -s -o /dev/null -w "%{http_code}" \
+    -X POST "$DISCORD_WEBHOOK_URL" \
     -H 'Content-Type: application/json' \
-    -d "$payload" >/dev/null 2>&1 || true
+    -d "$payload" 2>/dev/null)
+
+  if [ "$http_code" -eq 200 ] || [ "$http_code" -eq 204 ]; then
+    log "Discord notification sent successfully (HTTP $http_code)"
+  else
+    log_error "Discord notification failed (HTTP $http_code)"
+    return 1
+  fi
 }
 
 # Detect platform

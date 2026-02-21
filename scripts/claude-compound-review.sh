@@ -2,7 +2,7 @@
 # claude-compound-review.sh - Extract learnings from all projects
 # Part 1 of the compound learning system
 
-set -e
+set -eEuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"

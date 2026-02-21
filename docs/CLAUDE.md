@@ -48,7 +48,7 @@ The **review steps must run BEFORE implementation steps** so agents benefit from
 │   ├── claude-auto-compound.log           # Claude implementation output
 │   ├── opencode-compound-review.log       # OpenCode review output
 │   └── opencode-auto-compound.log         # OpenCode implementation output
-├── .env.local                             # Environment variables for both systems
+├── ~/.config/compound-learning/config.env # Environment variables for both systems
 ├── setup-claude-scheduling.sh             # Cron job setup for Claude
 ├── opencode-compound/
 │   ├── setup-multi-project-timers.sh      # Cron job setup for OpenCode
@@ -65,7 +65,7 @@ The **review steps must run BEFORE implementation steps** so agents benefit from
 Both systems require a Discord webhook URL for notifications:
 
 ```bash
-# In scripts/.env.local or bin/.env.local:
+# In ~/.config/compound-learning/config.env:
 DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN"
 CLAUDE_MODEL="claude-opus-4-5"
 OPENCODE_MODEL="opencode/big-bucket"
@@ -75,16 +75,14 @@ Get your webhook URL:
 1. Create a private Discord server
 2. Right-click channel → Edit channel → Integrations → Webhooks → New Webhook
 3. Copy the webhook URL
-4. Add to `.env.local` files
+4. Add to central config file
 
 ### Quick Setup
 
 ```bash
-# Option 1: Add to scripts/.env.local
-echo 'DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."' >> scripts/.env.local
-
-# Option 2: Add to bin/.env.local
-echo 'DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."' >> bin/.env.local
+# Create config directory and add webhook
+mkdir -p ~/.config/compound-learning
+echo 'DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."' >> ~/.config/compound-learning/config.env
 ```
 
 ## Usage
@@ -283,7 +281,7 @@ See also: [Root CLAUDE.md](../CLAUDE.md) for the compound learning system overvi
 ### Discord notifications not appearing
 ```bash
 # Check webhook URL is set
-grep DISCORD_WEBHOOK_URL scripts/.env.local bin/.env.local
+grep DISCORD_WEBHOOK_URL ~/.config/compound-learning/config.env
 
 # Test webhook manually
 curl -X POST "YOUR_WEBHOOK_URL" \
@@ -315,7 +313,7 @@ claude --version
 
 ## Next Steps
 
-1. ✅ Set up Discord webhook URL in `.env.local`
+1. ✅ Set up Discord webhook URL in `~/.config/compound-learning/config.env`
 2. ✅ Run manual test: `./scripts/claude-compound-review.sh`
 3. ✅ Check logs and Discord for results
 4. ✅ Run scheduling setup: `./setup-claude-scheduling.sh`

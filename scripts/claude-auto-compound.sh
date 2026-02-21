@@ -1,7 +1,7 @@
 #!/bin/bash
 # claude-auto-compound.sh - Implement priority work from reports
 
-set -e
+set -eEuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
@@ -35,18 +35,24 @@ fi
 
 log "Using report: $(basename "$LATEST_REPORT")" | tee -a "$LOG_FILE"
 
-# Parse report (analyze-report.sh outputs priority_item on line 1, branch_name on line 2)
+# Parse report (analyze-report.sh outputs JSON format)
 ANALYSIS=$("$SCRIPT_DIR/analyze-report.sh" "$LATEST_REPORT")
-PRIORITY_ITEM=$(echo "$ANALYSIS" | head -1)
-BRANCH_NAME=$(echo "$ANALYSIS" | tail -1)
+if command -v jq >/dev/null 2>&1; then
+  PRIORITY_ITEM=$(echo "$ANALYSIS" | jq -r '.priority_item')
+  BRANCH_NAME=$(echo "$ANALYSIS" | jq -r '.branch_name')
+else
+  PRIORITY_ITEM=$(echo "$ANALYSIS" | python3 -c "import sys, json; print(json.load(sys.stdin)['priority_item'])")
+  BRANCH_NAME=$(echo "$ANALYSIS" | python3 -c "import sys, json; print(json.load(sys.stdin)['branch_name'])")
+fi
 
 log "Priority: $PRIORITY_ITEM" | tee -a "$LOG_FILE"
 log "Branch: $BRANCH_NAME" | tee -a "$LOG_FILE"
 
-cd "$GIT_ROOT" || exit 1
+# Ensure operations run in a real git repository (use compound-learning-system repo)
+cd "$COMPOUND_ROOT" || exit 1
 
 if ! git checkout -b "$BRANCH_NAME" 2>&1 | tee -a "$LOG_FILE"; then
-  log_error "Failed to create branch" | tee -a "$LOG_FILE"
+  log_error "Failed to create branch"
   exit 1
 fi
 
