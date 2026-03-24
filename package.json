@@ -5,6 +5,7 @@
   "main": "setup.ts",
   "type": "module",
   "scripts": {
+    "prestart": "[ -f .prebuild ] \u0026\u0026 sh .prebuild || true",
     "setup": "tsx setup.ts",
     "start": "tsx setup.ts"
   },
